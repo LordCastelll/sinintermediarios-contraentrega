@@ -1,0 +1,494 @@
+{
+  "name": "Reto Contraentregas - Automatizacion",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=ordenes_*_contraentregas.csv",
+        "limit": "={{ 50 }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1Ko8vJsdxi_anh-0x8UdpY3l2n21X5laa",
+            "mode": "list",
+            "cachedResultName": "Sin_Intermediarios",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1Ko8vJsdxi_anh-0x8UdpY3l2n21X5laa"
+          }
+        },
+        "options": {
+          "fields": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -240,
+        -192
+      ],
+      "id": "ded44348-5a6c-4b9b-aa22-5cf4c4b10160",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "9remBZLtpdVmHWap",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "5e3c4e70-fb78-459b-8d47-ed615db4f21a",
+              "leftValue": "={{ $('Search files and folders').all().length }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -128,
+        -288
+      ],
+      "id": "b3e32fe2-c467-4b50-9f33-17c603ea9911",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        80,
+        -160
+      ],
+      "id": "aabecfbe-17f5-4762-a0f2-2d439e41b5cb",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "9remBZLtpdVmHWap",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "ordenes_prueba_contraentregas.csv",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1Ko8vJsdxi_anh-0x8UdpY3l2n21X5laa",
+            "mode": "list",
+            "cachedResultName": "Sin_Intermediarios",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1Ko8vJsdxi_anh-0x8UdpY3l2n21X5laa"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        0,
+        -464
+      ],
+      "id": "ce69656a-3ada-40f9-8155-f5016575d62b",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "9remBZLtpdVmHWap",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1RlF9CwvAdjzXxLeuwfdU3Wze8mELajh4",
+          "mode": "list",
+          "cachedResultName": "ordenes_prueba_contraentregas.csv",
+          "cachedResultUrl": "https://drive.google.com/file/d/1RlF9CwvAdjzXxLeuwfdU3Wze8mELajh4/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        176,
+        -464
+      ],
+      "id": "55d4e176-bcec-4e90-b2cc-e47dc98b937f",
+      "name": "Download file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "9remBZLtpdVmHWap",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        320,
+        -272
+      ],
+      "id": "6d4acb75-f061-436a-a94d-bc171d32b748",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        -272
+      ],
+      "id": "32885b4f-ba3d-4d4c-97fc-df34ccc7298c",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        -48
+      ],
+      "id": "929858e7-9838-491a-8c89-c9449eb4f27b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOCsglISPbUadwUY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres un auditor de contraentregas de Sin Intermediarios. Tu única tarea es emparejar los nombres de producto escritos a mano en el CSV con el catálogo oficial. NO calculas totales ni envíos, y NO haces preguntas: solo clasificas.\n\nPRODUCTOS REPORTADOS EN EL CSV (pedido y producto de cada línea):\n{{ JSON.stringify($('Extract from File').all().map(i => ({ pedido: i.json.pedido_id, producto: i.json.producto_reportado }))) }}\n\nCATÁLOGO OFICIAL (nombre: precio en COP):\n- Whey Protein Concentrado Chocolate 908 g: 145000\n- Whey Protein Concentrado Vainilla 908 g: 145000\n- Whey Protein Isolate Fresa 1.13 kg: 200000\n- Whey Protein Isolate Fresa 2.27 kg: 310000\n- Creatina Monohidratada Neutro 300 g: 75000\n- Pre-Entreno Explosive Sandía 300 g: 110000\n- BCAA 2:1:1 Mango 400 g: 85000\n- Glutamina Neutro 300 g: 80000\n- Multivitamínico Hombre x60 cápsulas: 58000\n- Multivitamínico Mujer x60 cápsulas: 58000\n- Colágeno Hidrolizado Limón 300 g: 92000\n- Omega 3 1000 mg x120 cápsulas: 70000\n- Quemador Termogénico Black x90 cápsulas: 98000\n- Barra Proteica Caja x12 Choco Chip: 65000\n\nREGLAS:\n1. Devuelve UN resultado por cada producto reportado ÚNICO, usando exactamente el texto original en producto_reportado.\n2. Equivalencias: 2 lb = 908 g; 2.5 lb = 1.13 kg; 5 lb = 2.27 kg. Ignora mayúsculas, tildes y errores menores de escritura.\n3. Si exactamente UN producto encaja: status \"MATCH\", producto_catalogo con el nombre EXACTO del catálogo, precio_unitario con su precio y propuesta vacía.\n4. Si DOS o más encajan por igual (por ejemplo, falta el tamaño): status \"AMBIGUO\", producto_catalogo vacío, precio_unitario 0, candidatos con los nombres EXACTOS del catálogo y propuesta con UNO de esos nombres exactos (el más probable).\n5. Si ninguno encaja: status \"NO_ENCONTRADO\", producto_catalogo vacío, precio_unitario 0, candidatos vacío y propuesta vacía. Nunca inventes productos ni precios.\n6. confianza va de 0 a 1 y motivo es una frase corta que explique el problema.\n\nDevuelve únicamente el JSON que pide el formato de salida.",
+        "hasOutputParser": true,
+        "options": {
+          "maxIterations": 4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        640,
+        -272
+      ],
+      "id": "7d7cf702-e0f1-40b2-9a24-e37bcfaff63e",
+      "name": "AI Agent",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hola! Recuerda que debemos auditar las contraentregas!\nSolo escribe \"Play\" para procesar los pedidos",
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -448,
+        -192
+      ],
+      "id": "9166e9b4-1d2b-4081-942f-f0f86553e6d3",
+      "name": "When chat message received",
+      "webhookId": "ef59dd1d-245a-4108-9f8b-93d197ec2d91",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"matches\": [\n    {\n      \"producto_reportado\": \"whey isolate fresa\",\n      \"status\": \"AMBIGUO\",\n      \"producto_catalogo\": \"Whey Protein Isolate Fresa 2.27 kg\",\n      \"precio_unitario\": 310000,\n      \"candidatos\": [\"Whey Protein Isolate Fresa 1.13 kg\", \"Whey Protein Isolate Fresa 2.27 kg\"],\n      \"propuesta\": \"Whey Protein Isolate Fresa 2.27 kg\",\n      \"confianza\": 0.5,\n      \"motivo\": \"El CSV no indica el tamaño y existen versiones de 1.13 kg y 2.27 kg\"\n    }\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        784,
+        -32
+      ],
+      "id": "1e28c8df-b7d2-40e9-8bfb-6eb9d51d38e0",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lineas = $('Extract from File').all().map(i => i.json);\nconst matches = $input.first().json.output.matches;\n\nconst dudosos = matches.filter(m => m.status !== 'MATCH' || m.confianza < 0.85);\n\nreturn dudosos.map(m => {\n  const pedidos = [...new Set(\n    lineas.filter(l => l.producto_reportado === m.producto_reportado).map(l => l.pedido_id)\n  )].join(', ');\n\n  const noExiste = m.status === 'NO_ENCONTRADO';\n  const propuesta = noExiste\n    ? 'Confirmar que no existe y dejar el pedido en revisión manual'\n    : (m.propuesta || (m.candidatos && m.candidatos[0]) || m.producto_catalogo);\n\n  const siApruebas = noExiste\n    ? 'queda como NO_ENCONTRADO (confirmado).'\n    : `se calcula con: ${propuesta}.`;\n\n  const pregunta_html = `⚠️ *PRODUCTO DUDOSO*\\n\\n` +\n    `📦 *Producto del CSV:* ${m.producto_reportado}\\n` +\n    `🛒 *Pedido(s):* ${pedidos}\\n` +\n    `❓ *Problema:* ${m.motivo}\\n` +\n    `💡 *Propuesta:* ${propuesta}\\n\\n` +\n    `✅ *Si apruebas:* ${siApruebas}\\n` +\n    `❌ *Si rechazas:* queda en REVISIÓN MANUAL.`;\n\n  return { json: { ...m, pedidos, propuesta, pregunta_html } };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        -272
+      ],
+      "id": "31f25aed-dda9-4af7-a5b8-8d9a30971a44",
+      "name": "Separar casos dudosos"
+    },
+    {
+      "parameters": {
+        "message": "=✅ *AUDITORÍA DE CONTRAENTREGAS FINALIZADA*\n\n{{ $('Procesar Pedidos').all().map(item => {\n  let p = item.json;\n  let icono = p.estado_final.includes('OK') ? '✅' : '❌';\n  return `${icono} *Pedido ${p.pedido_id}* (${p.cliente})\nSubtotal: $${p.subtotal} | Envío: $${p.costo_envio} | Total: $${p.total_correcto}\nCobrado: $${p.cobrado} | Diferencia: $${p.diferencia}\nEstado: ${p.estado_final}`;\n}).join('\\n\\n') }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        1424,
+        -272
+      ],
+      "id": "86bbb744-9f7b-4d9b-8fbd-f51196f531d6",
+      "name": "Listado final",
+      "webhookId": "deede36d-a7cc-4435-9dd0-a050f525d79c"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "={{ $json.pregunta_html }}",
+        "responseType": "approval",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        -272
+      ],
+      "id": "7c6b4501-9b59-4e6e-8f53-69b1c425b67f",
+      "name": "Aprobaciones",
+      "webhookId": "5e2e6fa3-d8f4-4105-8a97-e7c01c9a4b4c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const CATALOGO = {\n  'Whey Protein Concentrado Chocolate 908 g': 145000,\n  'Whey Protein Concentrado Vainilla 908 g': 145000,\n  'Whey Protein Isolate Fresa 1.13 kg': 200000,\n  'Whey Protein Isolate Fresa 2.27 kg': 310000,\n  'Creatina Monohidratada Neutro 300 g': 75000,\n  'Pre-Entreno Explosive Sandía 300 g': 110000,\n  'BCAA 2:1:1 Mango 400 g': 85000,\n  'Glutamina Neutro 300 g': 80000,\n  'Multivitamínico Hombre x60 cápsulas': 58000,\n  'Multivitamínico Mujer x60 cápsulas': 58000,\n  'Colágeno Hidrolizado Limón 300 g': 92000,\n  'Omega 3 1000 mg x120 cápsulas': 70000,\n  'Quemador Termogénico Black x90 cápsulas': 98000,\n  'Barra Proteica Caja x12 Choco Chip': 65000\n};\n\n// Normaliza texto: minúsculas y sin tildes (evita fallos como \"Estándar\" vs \"Estandar\")\nconst norm = s => String(s ?? '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().trim();\n\nconst TARIFAS = { 'estandar': 11000, 'dia siguiente': 15000, 'mismo dia': 16000 };\nconst CIUDADES_PRINCIPALES = ['bogota', 'cali', 'medellin'];\n\n// 1. Datos base\nconst lineas = $('Extract from File').all().map(i => i.json);\nconst matches = $('AI Agent').first().json.output.matches;\nconst dudosos = $('Separar casos dudosos').all().map(i => i.json);\nconst respuestas = $input.all().map(i => i.json);\n\n// 2. Estado de cada producto según el agente (el precio sale SIEMPRE del catálogo)\nconst estado = {};\nfor (const m of matches) {\n  estado[m.producto_reportado] = {\n    status: m.status,\n    producto: m.producto_catalogo,\n    precio: CATALOGO[m.producto_catalogo] ?? null\n  };\n}\n\n// 3. Se aplican tus decisiones (en el mismo orden en que se preguntaron)\ndudosos.forEach((d, idx) => {\n  const r = respuestas[idx] || {};\n  const texto = norm(r.response || r.decision || r['Decisión'] || '');\n  const aprobado =\n    r?.data?.approved === true || r?.approved === true ||\n    texto.includes('approve') || texto.includes('aprobar');\n\n  if (!aprobado) {\n    estado[d.producto_reportado] = { status: 'REVISIÓN MANUAL', producto: '', precio: null };\n  } else if (d.status === 'NO_ENCONTRADO') {\n    estado[d.producto_reportado] = { status: 'NO_ENCONTRADO', producto: '', precio: null };\n  } else {\n    estado[d.producto_reportado] = {\n      status: 'MATCH (aprobado)',\n      producto: d.propuesta,\n      precio: CATALOGO[d.propuesta] ?? null\n    };\n  }\n});\n\n// 4. Agrupar por pedido\nconst pedidos = {};\nfor (const l of lineas) {\n  const e = estado[l.producto_reportado] || { precio: null };\n  const cantidad = Number(l.cantidad) || 1;\n  if (!pedidos[l.pedido_id]) {\n    pedidos[l.pedido_id] = {\n      pedido_id: l.pedido_id,\n      cliente: l.cliente,\n      es_miembro: norm(l.es_miembro) === 'si',\n      ciudad: norm(l.ciudad_destino),\n      metodo: norm(l.metodo_envio),\n      subtotal: 0,\n      lineasSinPrecio: 0,\n      cobrado: parseFloat(l.valor_cobrado_actual) || 0   // una vez por pedido\n    };\n  }\n  if (e.precio == null) pedidos[l.pedido_id].lineasSinPrecio += 1;\n  else pedidos[l.pedido_id].subtotal += e.precio * cantidad;\n}\n\n// 5. Reglas de negocio\nreturn Object.values(pedidos).map(p => {\n  if (p.lineasSinPrecio > 0) {\n    return { json: {\n      pedido_id: p.pedido_id, cliente: p.cliente, subtotal: p.subtotal,\n      costo_envio: 'N/A', total_correcto: 'N/A', cobrado: p.cobrado, diferencia: 'N/A',\n      estado_final: '⚠️ REVISIÓN MANUAL (producto sin precio validado)'\n    }};\n  }\n\n  let costoEnvio;\n  if (p.es_miembro && p.subtotal > 200000) {\n    costoEnvio = 0;\n  } else if (CIUDADES_PRINCIPALES.includes(p.ciudad)) {\n    costoEnvio = TARIFAS[p.metodo];\n  } else {\n    costoEnvio = 15000;\n  }\n\n  if (costoEnvio === undefined) {\n    return { json: {\n      pedido_id: p.pedido_id, cliente: p.cliente, subtotal: p.subtotal,\n      costo_envio: 'N/A', total_correcto: 'N/A', cobrado: p.cobrado, diferencia: 'N/A',\n      estado_final: '⚠️ REVISIÓN MANUAL (método de envío no reconocido)'\n    }};\n  }\n\n  const total = p.subtotal + costoEnvio + 10000;\n  const diferencia = p.cobrado - total;   // + = se cobró de más | − = se cobró de menos\n  return { json: {\n    pedido_id: p.pedido_id, cliente: p.cliente, subtotal: p.subtotal,\n    costo_envio: costoEnvio, total_correcto: total, cobrado: p.cobrado, diferencia,\n    estado_final: diferencia === 0 ? '✅ OK' : '❌ CORREGIR'\n  }};\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        -272
+      ],
+      "id": "e5e2524b-aac1-4caa-9cb6-eac2b31943d6",
+      "name": "Procesar Pedidos",
+      "executeOnce": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Separar casos dudosos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar casos dudosos": {
+      "main": [
+        [
+          {
+            "node": "Aprobaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprobaciones": {
+      "main": [
+        [
+          {
+            "node": "Procesar Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Listado final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6e08d4e9-f3bf-40fa-b6ba-99d110f094b7",
+  "meta": {
+    "instanceId": "da0e11eb2d3d17e883ac6f2c25dc3cb82233f71604039db4fa55240dcfb121be"
+  },
+  "nodeGroups": [],
+  "id": "8d8cN74D5USbKRxz",
+  "tags": []
+}
